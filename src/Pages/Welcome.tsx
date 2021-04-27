@@ -1,37 +1,44 @@
-import React, { useState } from 'react'
-import { Text, Image, SafeAreaView, StyleSheet } from 'react-native'
+import React from 'react'
+import { View, Text, Image, SafeAreaView, StyleSheet } from 'react-native'
+import { useNavigation } from '@react-navigation/core'
+
+import { ButtonNext } from '../Components/ButtonNext'
 
 import wateringImg from '../assets/watering.png'
+
 import colors from '../../styles/colors'
-import { Button } from '../Components/Button'
+import fonts from '../../styles/fonts'
 
 export function Welcome() {
+    const navigation = useNavigation()
 
-    const [ visible, setVisible ] = useState(false)
-
-    function handleVisible() {
-        setVisible(true)
+    function handleStart() {
+        navigation.navigate('UserIdentification')
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>
-                Gerencie  {'\n'}
-                suas plantas {'\n'}
-                de forma fácil
-            </Text>
 
-            {
-                visible &&
+            <View style={styles.wrapper}>
+
+                <Text style={styles.title}>
+                    Gerencie  {'\n'}
+                    suas plantas de {'\n'}
+                    forma fácil
+                </Text>
+
                 <Image source={wateringImg} style={styles.image} />
-            }
 
-            <Text style={styles.subtitle}>
-                Não esqueça mais de regar suas plantas. {'\n'}
-                Nós cuidamos de lembrar você sempre que precisar.
-            </Text>
+                <Text style={styles.subtitle}>
+                    Não esqueça mais de regar suas plantas.
+                    Nós cuidamos de lembrar você sempre que precisar.
+                </Text>
 
-            <Button title=">" onPress={handleVisible} />            
+                <ButtonNext 
+                    onPress={handleStart}
+                />       
+                
+            </View>         
 
         </SafeAreaView>
     )
@@ -41,8 +48,14 @@ const styles = StyleSheet.create({
     
     container: {
         flex: 1,
+        paddingTop: 20
+    },
+
+    wrapper: {
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        paddingHorizontal: 20
     },
 
     title: {
@@ -50,14 +63,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         color: colors.heading,
-        marginTop: 38
+        marginTop: 28,
+        fontFamily: fonts.heading,
+        lineHeight: 28
     },
 
     subtitle: {
         textAlign: 'center',
         fontSize: 18,
         paddingHorizontal: 20,
-        color: colors.heading
+        color: colors.heading,
+        fontFamily: fonts.text
     },
 
     image: {
