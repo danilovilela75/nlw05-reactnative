@@ -34,7 +34,7 @@ interface PlantasProps {
     }
 }
 
-export function PlantSelect() {
+export function PlantSelect({ navigation }) {
 
     const [ locais, setLocais ] = React.useState<EnvironmentProps[]>([])
     const [ plantas, setPlantas ] = React.useState<PlantasProps[]>([])
@@ -46,7 +46,6 @@ export function PlantSelect() {
     
     const [ page, setPage ] = React.useState(1)
     const [ loadMore, setLoadMore ] = React.useState(true)
-    const [ loadedAll, setLoadedAll ] = React.useState(false)
 
     React.useEffect(() => {
         async function loadLocais() {
@@ -102,6 +101,10 @@ export function PlantSelect() {
             
     }
 
+    function handlePlantSelect(plant: PlantasProps) {
+        navigation.navigate('PlantSave', { plant })
+    }
+
     if(loading)
         return <Load />
 
@@ -124,6 +127,7 @@ export function PlantSelect() {
             <View>
                 <FlatList 
                     data={locais}
+                    keyExtractor={(item) => String(item.key)}
                     renderItem={({ item }) => (
                         <EnviromentButton 
                             title={item.title}
@@ -140,9 +144,11 @@ export function PlantSelect() {
             <View style={styles.plants}>
                 <FlatList 
                     data={filtroPlantas}
+                    keyExtractor={(item) => String(item.id)}
                     renderItem={({ item }) => (
                         <PlantCardPrimary 
                             data={item}
+                            onPress={() => handlePlantSelect(item)}                            
                         />
                     )}
                     showsVerticalScrollIndicator={false}

@@ -7,17 +7,30 @@ import {
 } from 'react-native'
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import colors from '../../styles/colors'
 import fonts from '../../styles/fonts'
 import daniloImg from '../assets/danilo.png'
 
 export function Header() {
+
+    const [ username, setUsername ] = React.useState<string>()
+
+    React.useEffect(() => {
+        async function loadUser() {
+            const user = await AsyncStorage.getItem('@plantmanager:user')
+            setUsername(user || '')
+        }
+        loadUser()
+    }, [])
+
     return (
         <View style={styles.container}>
 
             <View>
                 <Text style={styles.hdOla}>Olá, </Text>
-                <Text style={styles.hdNome}>Danilo</Text>
+                <Text style={styles.hdNome}>{username}</Text>
             </View>
 
             <Image source={daniloImg} style={styles.hdIMG} />

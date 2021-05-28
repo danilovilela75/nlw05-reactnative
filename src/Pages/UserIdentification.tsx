@@ -6,11 +6,13 @@ import {
     StyleSheet,
     TextInput,
     KeyboardAvoidingView,
-    Platform
+    Platform,
+    Alert
 } from 'react-native'
 import { useNavigation } from '@react-navigation/core'
-
 import { Button } from '../Components/Button'
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import colors from '../../styles/colors'
 import fonts from '../../styles/fonts'
@@ -22,7 +24,6 @@ export function UserIdentification() {
     const [ isFocused, setIsFocused ] = React.useState(false)
     const [ isFilled, setIsFilled ] = React.useState(false)
     const [ name, setName ] = React.useState<string>()
-
 
     function handleInputBlur() {
         setIsFocused(false)
@@ -38,7 +39,11 @@ export function UserIdentification() {
         setName(value)
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
+        if(!name)
+            return Alert.alert('Me diz como te chamas 🙄')
+
+        await AsyncStorage.setItem('@plantmanager:user', name)
         navigation.navigate('Confirmation')
     }
 
@@ -68,10 +73,10 @@ export function UserIdentification() {
                                 { borderColor: colors.green }
                             ]}
                             placeholder="Digite um nome"
-                            placeholderTextColor="#999"
                             onBlur={handleInputBlur}
                             onFocus={handleInputFocus}
                             onChangeText={handleInputChange}
+                            value={name}
                         />
 
                         <View style={styles.footer}>
